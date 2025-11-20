@@ -5,11 +5,302 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Health Assistant Chatbot</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== ATTRACTIVE ENHANCEMENTS ===== */
+        
+        /* Dark Mode */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+        }
+        
+        body.dark-mode .dashboard,
+        body.dark-mode .login-box,
+        body.dark-mode .signup-box,
+        body.dark-mode .profile-box {
+            background: #0f3460;
+            color: #fff;
+        }
+        
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select {
+            background: #16213e;
+            color: #fff;
+            border-color: #e94560;
+        }
+        
+        body.dark-mode .chat-box {
+            background: #16213e;
+            border-color: #e94560;
+        }
+        
+        body.dark-mode .chat-message.bot .chat-bubble {
+            background: #16213e;
+            color: #fff;
+        }
+        
+        body.dark-mode .left-panel {
+            background: #0f3460;
+            border-right-color: #e94560;
+        }
+        
+        body.dark-mode .card {
+            background: #16213e;
+            border-color: #e94560;
+        }
+        
+        /* Dark Mode Toggle Button */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 999;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Typing Animation */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 8px;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% {
+                opacity: 0.5;
+                transform: translateY(0);
+            }
+            30% {
+                opacity: 1;
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        /* Badge System */
+        .badges-container {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            cursor: help;
+            transition: all 0.3s ease;
+        }
+        
+        .badge:hover {
+            transform: scale(1.2) rotate(5deg);
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .badge.earned {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Streak Counter */
+        .streak-counter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .streak-number {
+            font-size: 24px;
+            font-weight: 900;
+        }
+        
+        /* Mood Tracker */
+        .mood-tracker {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .mood-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+            background: #f0f0f0;
+        }
+        
+        .mood-btn:hover,
+        .mood-btn.active {
+            transform: scale(1.2);
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #495057;
+        }
+        
+        /* Animation for chat message */
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .chat-bubble {
+            animation: slideInRight 0.3s ease;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: slideInUp 0.3s ease;
+            z-index: 1000;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .stat-box {
+            background: #f8f9ff;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-box-label {
+            font-size: 11px;
+            color: #718096;
+            text-transform: uppercase;
+        }
+        
+        .stat-box-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-top: 5px;
+        }
+        
+        /* Shimmer Loading Effect */
+        .shimmer {
+            animation: shimmer 2s infinite;
+            background: linear-gradient(90deg, #f0f0f0, #fff, #f0f0f0);
+            background-size: 200% 100%;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
 </head>
 <body>
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
+    
     <!-- Login Form -->
     <div id="loginContainer" class="container active">
-        <div class="login-box">
+        <div id="loginBox" class="login-box">
             <h1>Health Assistant</h1>
             <p class="subtitle">Your Personal Health Companion</p>
             <form id="loginForm">
@@ -137,21 +428,79 @@
                             <p><strong>BMI:</strong> <span id="displayBMI">-</span></p>
                             <p><strong>Goal:</strong> <span id="displayGoal">-</span></p>
                         </div>
+                        
+                        <!-- Achievements/Badges -->
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                            <h4 style="font-size: 13px; color: #667eea; margin-bottom: 10px;">🏆 Achievements</h4>
+                            <div class="badges-container">
+                                <div class="badge earned" title="First Step">👣</div>
+                                <div class="badge earned" title="Hydration Master">💧</div>
+                                <div class="badge earned" title="Meal Planner">🍽️</div>
+                                <div class="badge" title="7-Day Streak">🔥</div>
+                                <div class="badge" title="Fitness Champion">💪</div>
+                                <div class="badge" title="Sleep Expert">😴</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="stats-card">
                         <h3>Daily Recommendations</h3>
-                        <div class="stat-item">
-                            <label>Daily Calories:</label>
-                            <span id="dailyCalories" class="stat-value">-</span>
+                        
+                        <!-- Streak Counter -->
+                        <div class="streak-counter">
+                            <span>🔥</span>
+                            <span class="streak-number" id="streakCount">0</span>
+                            <span>Day Streak</span>
                         </div>
-                        <div class="stat-item">
-                            <label>Sleep Hours:</label>
-                            <span id="sleepHours" class="stat-value">-</span>
+                        
+                        <!-- Mood Tracker -->
+                        <div>
+                            <p style="font-size: 12px; color: #718096; margin-bottom: 8px;">How are you feeling?</p>
+                            <div class="mood-tracker">
+                                <button class="mood-btn" onclick="setMood('😢')" title="Bad">😢</button>
+                                <button class="mood-btn" onclick="setMood('😐')" title="Okay">😐</button>
+                                <button class="mood-btn" onclick="setMood('🙂')" title="Good">🙂</button>
+                                <button class="mood-btn" onclick="setMood('😄')" title="Great">😄</button>
+                                <button class="mood-btn" onclick="setMood('🤩')" title="Amazing">🤩</button>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <label>Water Intake:</label>
-                            <span id="waterIntake" class="stat-value">-</span> L
+                        
+                        <!-- Calories -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <label>Daily Calories:</label>
+                                <span id="dailyCalories" class="stat-value">-</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" id="calorieProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Sleep -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <label>Sleep Hours:</label>
+                                <span id="sleepHours" class="stat-value">-</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" id="sleepProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Water -->
+                        <div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <label>Water Intake:</label>
+                                <span id="waterIntake" class="stat-value">-</span> L
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" id="waterProgress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Info Box -->
+                        <div class="info-box">
+                            💡 <strong>Tip:</strong> Stay consistent with your goals to unlock achievements!
                         </div>
                     </div>
 
@@ -205,6 +554,498 @@
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script>
+// ===== DARK MODE =====
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    const toggle = document.querySelector('.dark-mode-toggle');
+    toggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+}
+
+// Load dark mode preference on page load
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    if (document.querySelector('.dark-mode-toggle')) {
+        document.querySelector('.dark-mode-toggle').textContent = '☀️';
+    }
+}
+
+// ===== MOOD TRACKER =====
+function setMood(mood) {
+    document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    showToast(`You're feeling ${mood} today! Keep it up!`);
+    localStorage.setItem('todayMood', mood);
+}
+
+// ===== STREAK COUNTER =====
+function updateStreak() {
+    let streak = localStorage.getItem('streak') || 0;
+    const streakElement = document.getElementById('streakCount');
+    if (streakElement) {
+        streakElement.textContent = streak;
+    }
+}
+
+function incrementStreak() {
+    let streak = parseInt(localStorage.getItem('streak') || 0) + 1;
+    localStorage.setItem('streak', streak);
+    const streakElement = document.getElementById('streakCount');
+    if (streakElement) {
+        streakElement.textContent = streak;
+    }
+    showToast(`🔥 Streak increased to ${streak} days!`);
+}
+
+// ===== PROGRESS BARS =====
+function updateProgressBars() {
+    if (!userProfile) return;
+    
+    // Calorie Progress
+    const dailyCalories = calculateDailyCalories(userProfile);
+    const calorieIntake = parseInt(localStorage.getItem('todayCalories') || 0);
+    const calorieProgress = Math.min((calorieIntake / dailyCalories) * 100, 100);
+    const calorieProgressElement = document.getElementById('calorieProgress');
+    if (calorieProgressElement) {
+        calorieProgressElement.style.width = calorieProgress + '%';
+    }
+    
+    // Sleep Progress
+    const sleepTarget = 8;
+    const sleepLogged = parseInt(localStorage.getItem('todaySleep') || 0);
+    const sleepProgress = Math.min((sleepLogged / sleepTarget) * 100, 100);
+    const sleepProgressElement = document.getElementById('sleepProgress');
+    if (sleepProgressElement) {
+        sleepProgressElement.style.width = sleepProgress + '%';
+    }
+    
+    // Water Progress
+    const waterTarget = (userProfile.weight * 0.033).toFixed(1);
+    const waterLogged = parseFloat(localStorage.getItem('todayWater') || 0);
+    const waterProgress = Math.min((waterLogged / waterTarget) * 100, 100);
+    const waterProgressElement = document.getElementById('waterProgress');
+    if (waterProgressElement) {
+        waterProgressElement.style.width = waterProgress + '%';
+    }
+}
+
+// ===== TOAST NOTIFICATION =====
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'slideInUp 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ===== TYPING INDICATOR =====
+function showTypingIndicator() {
+    const chatBox = document.getElementById('chatBox');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'chat-message bot';
+    
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'typing-indicator';
+    typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    
+    messageDiv.appendChild(typingDiv);
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    
+    return messageDiv;
+}
+
+// ===== UNLOCK BADGE =====
+function unlockBadge(index) {
+    const badges = document.querySelectorAll('.badge');
+    if (badges[index]) {
+        badges[index].classList.add('earned');
+        showToast('🎉 Badge Unlocked!');
+    }
+}
+
+// ===== UTILITY: Capitalize Text =====
+function capitalizeFirst(str) {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).replace(/([A-Z])/g, ' $1');
+}
+
+// ===== HEALTH CALCULATIONS =====
+function calculateBMI(weight, height) {
+    // height should be in cm, convert to meters
+    const heightInMeters = height / 100;
+    return weight / (heightInMeters * heightInMeters);
+}
+
+function calculateDailyCalories(profile) {
+    const { age, gender, weight, height, activityLevel, goal } = profile;
+    
+    // Harris-Benedict Equation
+    let bmr;
+    if (gender === 'male') {
+        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+    } else {
+        bmr = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+    }
+    
+    // Activity Level Multiplier
+    const activityMultipliers = {
+        'sedentary': 1.2,
+        'light': 1.375,
+        'moderate': 1.55,
+        'very': 1.725
+    };
+    
+    const tdee = bmr * (activityMultipliers[activityLevel] || 1.2);
+    
+    // Goal Adjustment
+    let adjustment = 0;
+    if (goal === 'lose') adjustment = -500;
+    if (goal === 'gain') adjustment = 500;
+    if (goal === 'muscle') adjustment = 300;
+    
+    return Math.round(tdee + adjustment);
+}
+
+// ===== RECOMMENDATIONS =====
+function generateMealRecommendation(profile) {
+    const meals = {
+        breakfast: ['Oats with fruits', 'Egg white omelet', 'Greek yogurt bowl', 'Whole grain toast'],
+        lunch: ['Grilled chicken with brown rice', 'Salmon with vegetables', 'Turkey sandwich', 'Lentil curry'],
+        dinner: ['Grilled fish with sweet potato', 'Lean beef with quinoa', 'Tofu stir-fry', 'Chicken breast with broccoli'],
+        snacks: ['Apple with almonds', 'Greek yogurt', 'Mixed nuts', 'Protein bar']
+    };
+    
+    const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    
+    return {
+        breakfast: getRandomItem(meals.breakfast),
+        lunch: getRandomItem(meals.lunch),
+        dinner: getRandomItem(meals.dinner),
+        snacks: getRandomItem(meals.snacks)
+    };
+}
+
+function generateExerciseRecommendation(profile) {
+    const exercises = {
+        cardio: ['30 mins running', '45 mins cycling', '20 mins jump rope', '30 mins swimming'],
+        strength: ['5x5 squats', '4x8 bench press', '3x10 deadlifts', '3x12 pull-ups'],
+        flexibility: ['20 mins yoga', '15 mins stretching', '30 mins Pilates', '20 mins tai chi'],
+        rest: ['Light walking', 'Meditation', 'Foam rolling', 'Recovery day']
+    };
+    
+    const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const types = Object.keys(exercises);
+    const randomType = types[Math.floor(Math.random() * types.length)];
+    
+    return {
+        type: randomType,
+        activity: getRandomItem(exercises[randomType]),
+        duration: '30-45 mins',
+        intensity: randomType === 'rest' ? 'Light' : 'Moderate'
+    };
+}
+
+// ===== CHAT & MESSAGE MANAGEMENT =====
+let userProfile = null;
+let currentUser = null;
+
+function addMessageToChat(message, sender = 'user') {
+    const chatBox = document.getElementById('chatBox');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}`;
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.textContent = message;
+    
+    messageDiv.appendChild(bubble);
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function generateResponse(userMessage) {
+    userMessage = userMessage.toLowerCase();
+    
+    if (!userProfile) {
+        return 'Please create your profile first to get personalized recommendations!';
+    }
+    
+    // Meal recommendations
+    if (userMessage.includes('meal') || userMessage.includes('food') || userMessage.includes('eat')) {
+        const meals = generateMealRecommendation(userProfile);
+        return `Here are today's meal suggestions:
+🌅 Breakfast: ${meals.breakfast}
+🍽️ Lunch: ${meals.lunch}
+🌙 Dinner: ${meals.dinner}
+🍿 Snacks: ${meals.snacks}`;
+    }
+    
+    // Exercise recommendations
+    if (userMessage.includes('exercise') || userMessage.includes('workout') || userMessage.includes('fitness')) {
+        const exercise = generateExerciseRecommendation(userProfile);
+        return `Exercise Recommendation:
+💪 Type: ${capitalizeFirst(exercise.type)}
+Activity: ${exercise.activity}
+Duration: ${exercise.duration}
+Intensity: ${exercise.intensity}`;
+    }
+    
+    // BMI info
+    if (userMessage.includes('bmi') || userMessage.includes('weight')) {
+        const bmi = calculateBMI(userProfile.weight, userProfile.height);
+        let category = 'Normal weight';
+        if (bmi < 18.5) category = 'Underweight';
+        if (bmi >= 25 && bmi < 30) category = 'Overweight';
+        if (bmi >= 30) category = 'Obese';
+        
+        return `Your BMI: ${bmi.toFixed(1)} (${category})
+Remember to maintain a balanced diet and regular exercise!`;
+    }
+    
+    // General greeting
+    if (userMessage.includes('hello') || userMessage.includes('hi')) {
+        return `Hello ${userProfile.name}! 👋 How can I assist you with your health today?`;
+    }
+    
+    // Default response
+    return `I can help you with meal suggestions, exercise plans, and health tips. Ask me about meals, workouts, or your BMI!`;
+}
+
+function handleChatSubmit(e) {
+    e.preventDefault();
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (!message) return;
+    
+    addMessageToChat(message, 'user');
+    chatInput.value = '';
+    
+    // Show typing indicator
+    const typingMessage = showTypingIndicator();
+    
+    // Simulate response delay
+    setTimeout(() => {
+        typingMessage.remove();
+        const response = generateResponse(message);
+        addMessageToChat(response, 'bot');
+        
+        // Save to history
+        let history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+        history.push({ user: message, bot: response, timestamp: new Date().toLocaleTimeString() });
+        localStorage.setItem('chatHistory', JSON.stringify(history.slice(-50))); // Keep last 50
+    }, 1000);
+}
+
+function loadChatHistory() {
+    const historyList = document.getElementById('historyList');
+    if (!historyList) return;
+    
+    let history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    
+    if (history.length === 0) {
+        historyList.innerHTML = '<p class="empty-message">No recommendations yet</p>';
+        return;
+    }
+    
+    historyList.innerHTML = history.slice(-5).reverse().map(item => `
+        <div class="history-item">
+            <small>${item.timestamp}</small>
+            <p><strong>Q:</strong> ${item.user}</p>
+        </div>
+    `).join('');
+}
+
+// ===== QUICK ACTIONS =====
+function quickAction(action) {
+    if (action === 'recommendation') {
+        handleChatSubmit({ target: {}, preventDefault: () => {
+            document.getElementById('chatInput').value = 'Give me a recommendation';
+        }});
+        document.getElementById('chatInput').value = 'Give me a recommendation';
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    } else if (action === 'meals') {
+        document.getElementById('chatInput').value = 'What should I eat today?';
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    } else if (action === 'exercise') {
+        document.getElementById('chatInput').value = 'Suggest an exercise plan';
+        document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    } else if (action === 'clear') {
+        if (confirm('Clear all chat history?')) {
+            localStorage.setItem('chatHistory', '[]');
+            document.getElementById('chatBox').innerHTML = '<div class="welcome-message"><h2>Welcome to Health Assistant</h2><p>Ask me anything about your health, diet, or fitness!</p></div>';
+            loadChatHistory();
+            showToast('Chat history cleared!');
+        }
+    }
+}
+
+// ===== AUTHENTICATION =====
+function toggleAuth() {
+    document.getElementById('loginBox').style.display = document.getElementById('loginBox').style.display === 'none' ? 'block' : 'none';
+    document.getElementById('signupBox').style.display = document.getElementById('signupBox').style.display === 'none' ? 'block' : 'none';
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let user = users.find(u => u.email === email && u.password === password);
+    
+    if (user) {
+        currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('isLoggedIn', 'true');
+        showToast('Login successful!');
+        loadApp();
+    } else {
+        showToast('Invalid email or password!');
+    }
+}
+
+function handleSignup(e) {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    
+    if (password !== confirmPassword) {
+        showToast('Passwords do not match!');
+        return;
+    }
+    
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    if (users.find(u => u.email === email)) {
+        showToast('Email already registered!');
+        return;
+    }
+    
+    users.push({ email, password, name });
+    localStorage.setItem('users', JSON.stringify(users));
+    currentUser = { email, password, name };
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    localStorage.setItem('isLoggedIn', 'true');
+    showToast('Account created successfully!');
+    loadApp();
+}
+
+function handleProfileSubmit(e) {
+    e.preventDefault();
+    const profile = {
+        name: document.getElementById('userName').value,
+        age: parseInt(document.getElementById('userAge').value),
+        gender: document.getElementById('userGender').value,
+        weight: parseFloat(document.getElementById('userWeight').value),
+        height: parseFloat(document.getElementById('userHeight').value),
+        goal: document.getElementById('userGoal').value,
+        activityLevel: document.getElementById('userActivityLevel').value
+    };
+    
+    userProfile = profile;
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+    localStorage.setItem('profileCreated', 'true');
+    incrementStreak();
+    showToast('Profile saved successfully!');
+    loadApp();
+}
+
+// ===== DISPLAY FUNCTIONS =====
+function displayProfileData() {
+    if (!userProfile) return;
+    
+    document.getElementById('displayName').textContent = userProfile.name;
+    document.getElementById('displayAge').textContent = userProfile.age;
+    document.getElementById('displayHeight').textContent = userProfile.height;
+    document.getElementById('displayWeight').textContent = userProfile.weight;
+    document.getElementById('displayGoal').textContent = capitalizeFirst(userProfile.goal);
+    
+    const bmi = calculateBMI(userProfile.weight, userProfile.height);
+    document.getElementById('displayBMI').textContent = bmi.toFixed(1);
+    
+    const dailyCalories = calculateDailyCalories(userProfile);
+    document.getElementById('dailyCalories').textContent = dailyCalories;
+    
+    document.getElementById('sleepHours').textContent = userProfile.age > 18 ? '7-9 hours' : '8-10 hours';
+    document.getElementById('waterIntake').textContent = (userProfile.weight * 0.033).toFixed(1);
+    
+    updateStreak();
+    updateProgressBars();
+    loadChatHistory();
+}
+
+function showContainer(containerId) {
+    document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+    document.getElementById(containerId).classList.add('active');
+}
+
+// ===== APP INITIALIZATION =====
+function loadApp() {
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        showContainer('loginContainer');
+        return;
+    }
+    
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
+    if (!profile) {
+        showContainer('profileContainer');
+        return;
+    }
+    
+    userProfile = profile;
+    currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    showContainer('dashboardContainer');
+    displayProfileData();
+}
+
+// ===== EVENT LISTENERS =====
+document.addEventListener('DOMContentLoaded', function() {
+    loadApp();
+    
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) loginForm.addEventListener('submit', handleLogin);
+    
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) signupForm.addEventListener('submit', handleSignup);
+    
+    const profileForm = document.getElementById('profileForm');
+    if (profileForm) profileForm.addEventListener('submit', handleProfileSubmit);
+    
+    const chatForm = document.getElementById('chatForm');
+    if (chatForm) chatForm.addEventListener('submit', handleChatSubmit);
+    
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', function() {
+        localStorage.setItem('isLoggedIn', 'false');
+        localStorage.setItem('currentUser', 'null');
+        showContainer('loginContainer');
+        document.getElementById('loginForm').reset();
+        document.getElementById('signupForm').reset();
+        showToast('Logged out successfully!');
+    });
+    
+    const editProfileBtn = document.getElementById('editProfileBtn');
+    if (editProfileBtn) editProfileBtn.addEventListener('click', function() {
+        if (userProfile) {
+            document.getElementById('userName').value = userProfile.name;
+            document.getElementById('userAge').value = userProfile.age;
+            document.getElementById('userGender').value = userProfile.gender;
+            document.getElementById('userWeight').value = userProfile.weight;
+            document.getElementById('userHeight').value = userProfile.height;
+            document.getElementById('userGoal').value = userProfile.goal;
+            document.getElementById('userActivityLevel').value = userProfile.activityLevel;
+            showContainer('profileContainer');
+        }
+    });
+});
+    </script>
 </body>
 </html>
